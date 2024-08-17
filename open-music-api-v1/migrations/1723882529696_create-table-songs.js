@@ -29,18 +29,14 @@ exports.up = (pgm) => {
     album_id: {
       type: 'VARCHAR(50)',
       notNull: false,
-      references: '"albums"',
-      onDelete: 'CASCADE', // Menghapus lagu jika album terkait dihapus
     },
     created_at: {
-      type: 'TIMESTAMPTZ',
+      type: 'TEXT',
       notNull: true,
-      default: pgm.func('current_timestamp'),
     },
     updated_at: {
-      type: 'TIMESTAMPTZ',
+      type: 'TEXT',
       notNull: true,
-      default: pgm.func('current_timestamp'),
     },
   });
 };

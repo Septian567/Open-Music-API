@@ -1,32 +1,34 @@
+"use strict";
+
 exports.shorthands = undefined;
 
-exports.up = (pgm) => {
+exports.up = function (pgm) {
   pgm.createTable('albums', {
     id: {
       type: 'VARCHAR(50)',
-      primaryKey: true,
+      primaryKey: true
     },
     name: {
       type: 'TEXT',
-      notNull: true,
+      notNull: true
     },
     year: {
       type: 'INTEGER',
-      notNull: true,
+      notNull: true
     },
     created_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
-      default: pgm.func('current_timestamp'),
+      "default": pgm.func('current_timestamp')
     },
     updated_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
-      default: pgm.func('current_timestamp'),
-    },
+      "default": pgm.func('current_timestamp')
+    }
   });
 };
 
-exports.down = (pgm) => {
+exports.down = function (pgm) {
   pgm.dropTable('albums');
 };

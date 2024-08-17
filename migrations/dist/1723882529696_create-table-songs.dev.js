@@ -1,50 +1,53 @@
+"use strict";
+
 exports.shorthands = undefined;
 
-exports.up = (pgm) => {
+exports.up = function (pgm) {
   pgm.createTable('songs', {
     id: {
       type: 'VARCHAR(50)',
-      primaryKey: true,
+      primaryKey: true
     },
     title: {
       type: 'TEXT',
-      notNull: true,
+      notNull: true
     },
     year: {
       type: 'INTEGER',
-      notNull: true,
+      notNull: true
     },
     genre: {
       type: 'TEXT',
-      notNull: true,
+      notNull: true
     },
     performer: {
       type: 'TEXT',
-      notNull: true,
+      notNull: true
     },
     duration: {
       type: 'INTEGER',
-      notNull: false,
+      notNull: false
     },
     album_id: {
       type: 'VARCHAR(50)',
       notNull: false,
       references: '"albums"',
-      onDelete: 'CASCADE', // Menghapus lagu jika album terkait dihapus
+      onDelete: 'CASCADE' // Menghapus lagu jika album terkait dihapus
+
     },
     created_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
-      default: pgm.func('current_timestamp'),
+      "default": pgm.func('current_timestamp')
     },
     updated_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
-      default: pgm.func('current_timestamp'),
-    },
+      "default": pgm.func('current_timestamp')
+    }
   });
 };
 
-exports.down = (pgm) => {
+exports.down = function (pgm) {
   pgm.dropTable('songs');
 };

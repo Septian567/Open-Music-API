@@ -1,61 +1,63 @@
 class AlbumsHandler {
-  constructor(service, validator) {
+  constructor({ service, validator }) {
     this._service = service;
     this._validator = validator;
+
+    // Binding this untuk memastikan handler tetap memiliki konteks yang benar
+    this.postAlbumHandler = this._handlePostAlbum.bind(this);
+    this.getAlbumByIdHandler = this._handleGetAlbumById.bind(this);
+    this.putAlbumByIdHandler = this._handlePutAlbumById.bind(this);
+    this.deleteAlbumByIdHandler = this._handleDeleteAlbumById.bind(this);
   }
 
-  async postAlbumHandler(request, h) {
+  async _handlePostAlbum(request, h) {
     this._validator.validateAlbumPayload(request.payload);
     const { name = 'unnamed', year } = request.payload;
 
-    const albumId = await this._service.addAlbum({
-      name,
-      year,
-    });
+    const albumId = await this._service.addAlbum({ name, year });
 
-    const response = h.response({
-      status: 'success',
-      message: 'Album berhasil ditambahkan',
-      data: {
-        albumId,
-      },
+    return this._createResponse(h, 201, 'Album berhasil ditambahkan', {
+      albumId,
     });
-    response.code(201);
-    return response;
   }
 
-  async getAlbumByIdHandler(request) {
+  async _handleGetAlbumById(request, h) {
     const { id } = request.params;
-
     const album = await this._service.getAlbumById(id);
 
-    return {
-      status: 'success',
-      data: {
-        album,
-      },
-    };
+    return this._createResponse(h, 200, '', { album });
   }
 
-  async putAlbumByIdHandler(request) {
+  async _handlePutAlbumById(request, h) {
     this._validator.validateAlbumPayload(request.payload);
     const { id } = request.params;
 
     await this._service.editAlbumById(id, request.payload);
 
-    return {
-      status: 'success',
-      message: 'Lagu berhasil diperbarui',
-    };
+    return this._createResponse(h, 200, 'Album berhasil diperbarui');
   }
 
-  async deleteAlbumByIdHandler(request) {
+  async _handleDeleteAlbumById(request, h) {
     const { id } = request.params;
     await this._service.deleteAlbumById(id);
-    return {
+
+    return this._createResponse(h, 200, 'Album berhasil dihapus');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _createResponse(h, statusCode, message = '', data = {}) {
+    const responsePayload = {
       status: 'success',
-      message: 'Album berhasil dihapus',
+      message,
     };
+
+    if (Object.keys(data).length > 0) {
+      responsePayload.data = data;
+    }
+
+    const response = h.response(responsePayload);
+    response.code(statusCode);
+    return response;
   }
 }
 
