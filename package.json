@@ -9,10 +9,10 @@
     "lint": "eslint ./src",
     "migrate": "node-pg-migrate"
   },
-  "author": "Septian Dika Maulana",
+  "author": "Septian ",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Septian567/Open-Music-API"
+    "url": "https://github.com/rizama/dicoding-open-music-api"
   },
   "license": "ISC",
   "devDependencies": {
